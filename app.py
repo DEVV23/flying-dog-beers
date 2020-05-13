@@ -4,7 +4,7 @@ import io
 #from app import server
 import dash_html_components as html
 import dash_core_components as dcc
-import dash_table_experiments as dte
+#import dash_table_experiments as dte
 from dash.dependencies import Input, Output, State
 from datetime import datetime
 import pandas as pd
@@ -28,9 +28,9 @@ import urllib
 #    'background2': '#FF0',
 #    'text': 'yellow'
 #    }
-pathway = 'C:\\Users\\48022\\Documents\\Glassdor\\Survey Automation\\Files'
+#pathway = 'C:\\Users\\48022\\Documents\\Glassdor\\Survey Automation\\Files'
 
-files = [f for f in listdir(pathway) if isfile(join(pathway, f))]
+#files = [f for f in listdir(pathway) if isfile(join(pathway, f))]
 #firefox_path = 'C:/Program Files/Mozilla Firefox/firefox.exe %s'
 
 
