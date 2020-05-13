@@ -4,7 +4,7 @@ import io
 #from app import server
 import dash_html_components as html
 import dash_core_components as dcc
-import dash_table_experiments as dte
+#import dash_table_experiments as dte
 from dash.dependencies import Input, Output, State
 from datetime import datetime
 import pandas as pd
