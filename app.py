@@ -27,9 +27,9 @@ from os.path import isfile, join
 #    'background2': '#FF0',
 #    'text': 'yellow'
 #    }
-pathway = 'C:\\Users\\48022\\Documents\\Glassdor\\Survey Automation\\Files'
+#pathway = 'C:\\Users\\48022\\Documents\\Glassdor\\Survey Automation\\Files'
 
-files = [f for f in listdir(pathway) if isfile(join(pathway, f))]
+#files = [f for f in listdir(pathway) if isfile(join(pathway, f))]
 #firefox_path = 'C:/Program Files/Mozilla Firefox/firefox.exe %s'
 
 
@@ -124,12 +124,12 @@ app.layout = html.Div([
         html.Button(id='submit-button', type='submit', children='Submit'),
         html.Div(id='output_div'),
 
-        dcc.Dropdown(id='filename',
-                 options=[
-                     {'label': i, 'value': i} for i in files
-                 ],
-                 multi=True
-                 ),
+        #dcc.Dropdown(id='filename',
+        #         options=[
+         #            {'label': i, 'value': i} for i in files
+         #        ],
+         #        multi=True
+         #        ),
         html.Button(id='submit-button1', type='submit', children='Submit'),
         html.Div(id='output_div1'),
                      ])
