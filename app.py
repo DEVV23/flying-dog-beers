@@ -14,7 +14,7 @@ import dash_table
 import os
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-from PriceIndices import MarketHistory, Indices
+#from PriceIndices import MarketHistory, Indices
 from openpyxl import load_workbook
 from os import listdir
 from os.path import isfile, join
