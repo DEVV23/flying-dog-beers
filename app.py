@@ -125,12 +125,12 @@ app.layout = html.Div([
         html.Button(id='submit-button', type='submit', children='Submit'),
         html.Div(id='output_div'),
 
-        dcc.Dropdown(id='filename',
-                 options=[
-                     {'label': i, 'value': i} for i in files
-                 ],
-                 multi=True
-                 ),
+        #dcc.Dropdown(id='filename',
+        #         options=[
+        #             {'label': i, 'value': i} for i in files
+        #         ],
+        #         multi=True
+        #         ),
         html.Button(id='submit-button1', type='submit', children='Submit'),
         html.Div(id='output_div1'),
         html.Div([
