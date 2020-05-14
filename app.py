@@ -2481,6 +2481,10 @@ def update_output(list_of_contents,inputvalue,templatevalue):
             
                     
                     
+            df2 = df
+            df2.columns = new_listrawdata        
+            
+        
             new_listrawdata_df = pd.DataFrame(new_listrawdata)  
             print("Final Raw Data")
             
@@ -2499,8 +2503,8 @@ def update_output(list_of_contents,inputvalue,templatevalue):
             #csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
             xlsx_io = io.BytesIO()
             writer = pd.ExcelWriter(xlsx_io, engine='xlsxwriter')
-            new_listrawdata_df.to_excel(writer, sheet_name= "Raw", index = False)
-            final_datamap_df.to_excel(writer, sheet_name= "Mapping",index = False)
+            df2.to_excel(writer, sheet_name= "Raw Data", index = False)
+            final_datamap_df.to_excel(writer, sheet_name= "Answer Mapping",index = False)
 
             writer.save()
             xlsx_io.seek(0)
