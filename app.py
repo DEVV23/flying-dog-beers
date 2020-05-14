@@ -657,42 +657,96 @@ def update_output(list_of_contents,inputvalue,templatevalue):
             
                     
                     
+            print("Final Raw Data")
+            #list_rawdata = []
+            
+            #list_rawdata = list(df.columns.values.tolist())
+            
+            
+            
+            #new_listrawdata = list_rawdata
+            df2 = df
+            df2.columns = new_listrawdata        
+            
             new_listrawdata_df = pd.DataFrame(new_listrawdata)  
             print("Final Raw Data")
-            inputvalue = str(inputvalue) 
-            os.chdir((inputvalue))
-            new_listrawdata_df.columns = ['Raw Data Columns']
-            book = load_workbook('Dynata_v4.xlsx')
-            writer = pd.ExcelWriter('Dynata_v4.xlsx', engine='openpyxl') 
-            writer.book = book
-    
-    ## ExcelWriter for some reason uses writer.sheets to access the sheet.
-    ## If you leave it empty it will not know that sheet Main is already there
-    ## and will create a new sheet.
-    
-            writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
-            final_datamap_df.to_excel(writer, "FinalQuestionMapping11th_2",index = False,header = False)
-            writer.save()
             
-            wb = load_workbook('Dynata_v4.xlsx', read_only=False, keep_vba=False)
-            ws = wb['A1']
-    
-    # Overwrite Existing data in sheet with a dataframe.
-            rows = dataframe_to_rows(new_listrawdata_df, index=False, header=False)
-    
-            for c_idx, row in enumerate(rows, 1):
-                for r_idx, value in enumerate(row, 1):
-                    ws.cell(row=r_idx, column=c_idx, value=value)
+            ### Writing ####
+            #inputvalue = str(inputvalue) 
+            #os.chdir((inputvalue))
+            new_listrawdata_df.columns = ['Raw Data Columns']
+            
+            #import urllib
+
+           # import requests
+           # url = 'https://raw.githubusercontent.com/DEVV23/flying-dog-beers/200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm'
+           # read_data  = requests.get(url).content
+           
+            #csv_string = new_listrawdata_df.to_csv(index=False,encoding='utf-8')
+            #csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
+            xlsx_io = io.BytesIO()
+            writer = pd.ExcelWriter(xlsx_io, engine='xlsxwriter')
+            df2.to_excel(writer, sheet_name= "Raw Data", index = False)
+            final_datamap_df.to_excel(writer, sheet_name= "Answer Mapping",index = False)
+
+            writer.save()
+            xlsx_io.seek(0)
+            # https://en.wikipedia.org/wiki/Data_URI_scheme
+            media_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            data = base64.b64encode(xlsx_io.read()).decode("utf-8")
+            href_data_downloadable = f'data:{media_type};base64,{data}'
+             
+                    
+            
+            
+           # output = open('test.xls', 'wb')
+           # output.write(resp.content)
+            
+           # f = pd.read_excel(open('https://raw.githubusercontent.com/DEVV23/flying-dog-beers/200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm','rb'), sheetname='Answer Key')
+
+            
+            #wb = load_workbook('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm', read_only=False, keep_vba=True)
+            #ws = wb['Answer Key']
+            #rows_df = dataframe_to_rows(final_datamap_df, index=False, header=True)
+            #for c_idx, row in enumerate(rows_df, 1):
+            #    for r_idx, value in enumerate(row, 1):
+        
+             #       ws.cell(row=r_idx, column=c_idx, value=value)
     
     # Save file
-            wb.save('Dynata_v4.xlsx')
+            #wb.save('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6_updated11).xlsm')
+
+
+
+
+#            wb = load_workbook('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm', read_only=False, keep_vba=True)
+#            ws = wb['Raw Data']
     
+    # Overwrite Existing data in sheet with a dataframe.
+#            rows = dataframe_to_rows(new_listrawdata_df, index=False, header=False)
+#            rows_df = dataframe_to_rows(df, index=False, header=True)
+
+ #           for r_idx, row in enumerate(rows_df, 1):
+  #              for c_idx, value in enumerate(row, 1):
+   #                 ws.cell(row=r_idx, column=c_idx, value=value)
+
+    
+    #        for c_idx, row in enumerate(rows, 1):
+     #           for r_idx, value in enumerate(row, 1):
+      #              ws.cell(row=r_idx, column=c_idx, value=value)
+    
+    # Save file
+       #     wb.save('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6_updated11).xlsm')
             
-            return(html.Div([
-            html.H5("Output"),
-            dash_table.DataTable(
-                data=new_listrawdata_df.to_dict('records'),
-                columns=[{'name': i, 'id': i} for i in new_listrawdata_df.columns])]))
+            
+            
+
+            return(href_data_downloadable)            
+            #return(html.Div([
+            #html.H5("Output"),
+            #dash_table.DataTable(
+            #    data=new_listrawdata_df.to_dict('records'),
+            #    columns=[{'name': i, 'id': i} for i in new_listrawdata_df.columns])]))
 
     if('Template 2' in templatevalue):
               
@@ -919,29 +973,95 @@ def update_output(list_of_contents,inputvalue,templatevalue):
             
                     
             print("Final Raw Data")
+            list_rawdata = []
+            
+            list_rawdata = list(df.columns.values.tolist())
+            
+            
+            
+            new_listrawdata = list_rawdata
+            df2 = df
+            df2.columns = new_listrawdata        
+            
+            new_listrawdata_df = pd.DataFrame(new_listrawdata)  
+            print("Final Raw Data")
+            
+            ### Writing ####
+            #inputvalue = str(inputvalue) 
+            #os.chdir((inputvalue))
+            new_listrawdata_df.columns = ['Raw Data Columns']
+            
+            #import urllib
 
-            inputvalue = str(inputvalue) 
-            os.chdir((inputvalue))
-#            new_listrawdata_df.columns = ['Raw Data Columns']
- 
+           # import requests
+           # url = 'https://raw.githubusercontent.com/DEVV23/flying-dog-beers/200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm'
+           # read_data  = requests.get(url).content
+           
+            #csv_string = new_listrawdata_df.to_csv(index=False,encoding='utf-8')
+            #csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
+            xlsx_io = io.BytesIO()
+            writer = pd.ExcelWriter(xlsx_io, engine='xlsxwriter')
+            df2.to_excel(writer, sheet_name= "Raw Data", index = False)
+            final_datamap_df.to_excel(writer, sheet_name= "Answer Mapping",index = False)
 
-
-            book = load_workbook('Dynata v1.xlsx')
-            writer = pd.ExcelWriter('Dynata v1.xlsx', engine='openpyxl') 
-            writer.book = book
-    
-    ## ExcelWriter for some reason uses writer.sheets to access the sheet.
-    ## If you leave it empty it will not know that sheet Main is already there
-    ## and will create a new sheet.
-    
-            writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
-            final_datamap_df.to_excel(writer, "FinalQuestionMapping11th_2",index = False,header = False)
             writer.save()
+            xlsx_io.seek(0)
+            # https://en.wikipedia.org/wiki/Data_URI_scheme
+            media_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            data = base64.b64encode(xlsx_io.read()).decode("utf-8")
+            href_data_downloadable = f'data:{media_type};base64,{data}'
+             
+                    
             
+            
+           # output = open('test.xls', 'wb')
+           # output.write(resp.content)
+            
+           # f = pd.read_excel(open('https://raw.githubusercontent.com/DEVV23/flying-dog-beers/200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm','rb'), sheetname='Answer Key')
+
+            
+            #wb = load_workbook('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm', read_only=False, keep_vba=True)
+            #ws = wb['Answer Key']
+            #rows_df = dataframe_to_rows(final_datamap_df, index=False, header=True)
+            #for c_idx, row in enumerate(rows_df, 1):
+            #    for r_idx, value in enumerate(row, 1):
+        
+             #       ws.cell(row=r_idx, column=c_idx, value=value)
     
+    # Save file
+            #wb.save('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6_updated11).xlsm')
+
+
+
+
+#            wb = load_workbook('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm', read_only=False, keep_vba=True)
+#            ws = wb['Raw Data']
+    
+    # Overwrite Existing data in sheet with a dataframe.
+#            rows = dataframe_to_rows(new_listrawdata_df, index=False, header=False)
+#            rows_df = dataframe_to_rows(df, index=False, header=True)
+
+ #           for r_idx, row in enumerate(rows_df, 1):
+  #              for c_idx, value in enumerate(row, 1):
+   #                 ws.cell(row=r_idx, column=c_idx, value=value)
+
+    
+    #        for c_idx, row in enumerate(rows, 1):
+     #           for r_idx, value in enumerate(row, 1):
+      #              ws.cell(row=r_idx, column=c_idx, value=value)
+    
+    # Save file
+       #     wb.save('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6_updated11).xlsm')
             
-            return(html.Div([
-            html.H5("Output")]))
+            
+            
+
+            return(href_data_downloadable)            
+            #return(html.Div([
+            #html.H5("Output"),
+            #dash_table.DataTable(
+            #    data=new_listrawdata_df.to_dict('records'),
+            #    columns=[{'name': i, 'id': i} for i in new_listrawdata_df.columns])]))
 
 
     if('Template 3' in templatevalue):
@@ -1169,29 +1289,96 @@ def update_output(list_of_contents,inputvalue,templatevalue):
             
                     
             print("Final Raw Data")
+            list_rawdata = []
+            
+            list_rawdata = list(df.columns.values.tolist())
+            
+            
+            
+            new_listrawdata = list_rawdata
+            df2 = df
+            df2.columns = new_listrawdata        
+            
+            new_listrawdata_df = pd.DataFrame(new_listrawdata)  
+            print("Final Raw Data")
+            
+            ### Writing ####
+            #inputvalue = str(inputvalue) 
+            #os.chdir((inputvalue))
+            new_listrawdata_df.columns = ['Raw Data Columns']
+            
+            #import urllib
 
-            inputvalue = str(inputvalue) 
-            os.chdir((inputvalue))
-#            new_listrawdata_df.columns = ['Raw Data Columns']
- 
+           # import requests
+           # url = 'https://raw.githubusercontent.com/DEVV23/flying-dog-beers/200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm'
+           # read_data  = requests.get(url).content
+           
+            #csv_string = new_listrawdata_df.to_csv(index=False,encoding='utf-8')
+            #csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
+            xlsx_io = io.BytesIO()
+            writer = pd.ExcelWriter(xlsx_io, engine='xlsxwriter')
+            df2.to_excel(writer, sheet_name= "Raw Data", index = False)
+            final_datamap_df.to_excel(writer, sheet_name= "Answer Mapping",index = False)
 
-
-            book = load_workbook('Dynata v2.xlsx')
-            writer = pd.ExcelWriter('Dynata v2.xlsx', engine='openpyxl') 
-            writer.book = book
-    
-    ## ExcelWriter for some reason uses writer.sheets to access the sheet.
-    ## If you leave it empty it will not know that sheet Main is already there
-    ## and will create a new sheet.
-    
-            writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
-            final_datamap_df.to_excel(writer, "FinalQuestionMapping11th_2",index = False,header = False)
             writer.save()
+            xlsx_io.seek(0)
+            # https://en.wikipedia.org/wiki/Data_URI_scheme
+            media_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            data = base64.b64encode(xlsx_io.read()).decode("utf-8")
+            href_data_downloadable = f'data:{media_type};base64,{data}'
+             
+                    
             
+            
+           # output = open('test.xls', 'wb')
+           # output.write(resp.content)
+            
+           # f = pd.read_excel(open('https://raw.githubusercontent.com/DEVV23/flying-dog-beers/200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm','rb'), sheetname='Answer Key')
+
+            
+            #wb = load_workbook('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm', read_only=False, keep_vba=True)
+            #ws = wb['Answer Key']
+            #rows_df = dataframe_to_rows(final_datamap_df, index=False, header=True)
+            #for c_idx, row in enumerate(rows_df, 1):
+            #    for r_idx, value in enumerate(row, 1):
+        
+             #       ws.cell(row=r_idx, column=c_idx, value=value)
     
+    # Save file
+            #wb.save('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6_updated11).xlsm')
+
+
+
+
+#            wb = load_workbook('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm', read_only=False, keep_vba=True)
+#            ws = wb['Raw Data']
+    
+    # Overwrite Existing data in sheet with a dataframe.
+#            rows = dataframe_to_rows(new_listrawdata_df, index=False, header=False)
+#            rows_df = dataframe_to_rows(df, index=False, header=True)
+
+ #           for r_idx, row in enumerate(rows_df, 1):
+  #              for c_idx, value in enumerate(row, 1):
+   #                 ws.cell(row=r_idx, column=c_idx, value=value)
+
+    
+    #        for c_idx, row in enumerate(rows, 1):
+     #           for r_idx, value in enumerate(row, 1):
+      #              ws.cell(row=r_idx, column=c_idx, value=value)
+    
+    # Save file
+       #     wb.save('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6_updated11).xlsm')
             
-            return(html.Div([
-            html.H5("Output")]))
+            
+            
+
+            return(href_data_downloadable)            
+            #return(html.Div([
+            #html.H5("Output"),
+            #dash_table.DataTable(
+            #    data=new_listrawdata_df.to_dict('records'),
+            #    columns=[{'name': i, 'id': i} for i in new_listrawdata_df.columns])]))
+
 
 
     if('Template 4' in templatevalue):
@@ -1597,42 +1784,89 @@ def update_output(list_of_contents,inputvalue,templatevalue):
             
                     
                     
+            df2 = df
+            df2.columns = new_listrawdata        
+            
             new_listrawdata_df = pd.DataFrame(new_listrawdata)  
             print("Final Raw Data")
-            inputvalue = str(inputvalue) 
-            os.chdir((inputvalue))
-            new_listrawdata_df.columns = ['Raw Data Columns']
-            book = load_workbook('Dynata v3.xlsx')
-            writer = pd.ExcelWriter('Dynata v3.xlsx', engine='openpyxl') 
-            writer.book = book
-    
-    ## ExcelWriter for some reason uses writer.sheets to access the sheet.
-    ## If you leave it empty it will not know that sheet Main is already there
-    ## and will create a new sheet.
-    
-            writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
-            final_datamap_df.to_excel(writer, "FinalQuestionMapping12th_2",index = False,header = False)
-            writer.save()
             
-            wb = load_workbook('Dynata v3.xlsx', read_only=False, keep_vba=False)
-            ws = wb['A1']
-    
-    # Overwrite Existing data in sheet with a dataframe.
-            rows = dataframe_to_rows(new_listrawdata_df, index=False, header=False)
-    
-            for c_idx, row in enumerate(rows, 1):
-                for r_idx, value in enumerate(row, 1):
-                    ws.cell(row=r_idx, column=c_idx, value=value)
+            ### Writing ####
+            #inputvalue = str(inputvalue) 
+            #os.chdir((inputvalue))
+            new_listrawdata_df.columns = ['Raw Data Columns']
+            
+            #import urllib
+
+           # import requests
+           # url = 'https://raw.githubusercontent.com/DEVV23/flying-dog-beers/200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm'
+           # read_data  = requests.get(url).content
+           
+            #csv_string = new_listrawdata_df.to_csv(index=False,encoding='utf-8')
+            #csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
+            xlsx_io = io.BytesIO()
+            writer = pd.ExcelWriter(xlsx_io, engine='xlsxwriter')
+            df2.to_excel(writer, sheet_name= "Raw Data", index = False)
+            final_datamap_df.to_excel(writer, sheet_name= "Answer Mapping",index = False)
+
+            writer.save()
+            xlsx_io.seek(0)
+            # https://en.wikipedia.org/wiki/Data_URI_scheme
+            media_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            data = base64.b64encode(xlsx_io.read()).decode("utf-8")
+            href_data_downloadable = f'data:{media_type};base64,{data}'
+             
+                    
+            
+            
+           # output = open('test.xls', 'wb')
+           # output.write(resp.content)
+            
+           # f = pd.read_excel(open('https://raw.githubusercontent.com/DEVV23/flying-dog-beers/200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm','rb'), sheetname='Answer Key')
+
+            
+            #wb = load_workbook('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm', read_only=False, keep_vba=True)
+            #ws = wb['Answer Key']
+            #rows_df = dataframe_to_rows(final_datamap_df, index=False, header=True)
+            #for c_idx, row in enumerate(rows_df, 1):
+            #    for r_idx, value in enumerate(row, 1):
+        
+             #       ws.cell(row=r_idx, column=c_idx, value=value)
     
     # Save file
-            wb.save('Dynata v3.xlsx')
+            #wb.save('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6_updated11).xlsm')
+
+
+
+
+#            wb = load_workbook('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm', read_only=False, keep_vba=True)
+#            ws = wb['Raw Data']
     
+    # Overwrite Existing data in sheet with a dataframe.
+#            rows = dataframe_to_rows(new_listrawdata_df, index=False, header=False)
+#            rows_df = dataframe_to_rows(df, index=False, header=True)
+
+ #           for r_idx, row in enumerate(rows_df, 1):
+  #              for c_idx, value in enumerate(row, 1):
+   #                 ws.cell(row=r_idx, column=c_idx, value=value)
+
+    
+    #        for c_idx, row in enumerate(rows, 1):
+     #           for r_idx, value in enumerate(row, 1):
+      #              ws.cell(row=r_idx, column=c_idx, value=value)
+    
+    # Save file
+       #     wb.save('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6_updated11).xlsm')
             
-            return(html.Div([
-            html.H5("Output"),
-            dash_table.DataTable(
-                data=new_listrawdata_df.to_dict('records'),
-                columns=[{'name': i, 'id': i} for i in new_listrawdata_df.columns])]))
+            
+            
+
+            return(href_data_downloadable)            
+            #return(html.Div([
+            #html.H5("Output"),
+            #dash_table.DataTable(
+            #    data=new_listrawdata_df.to_dict('records'),
+            #    columns=[{'name': i, 'id': i} for i in new_listrawdata_df.columns])]))
+
 
 
 
@@ -2039,42 +2273,94 @@ def update_output(list_of_contents,inputvalue,templatevalue):
             
                     
                     
+            #new_listrawdata_df = pd.DataFrame(new_listrawdata)  
+            print("Final Raw Data")
+            #inputvalue = str(inputvalue) 
+            #os.chdir((inputvalue))
+            #new_listrawdata_df.columns = ['Raw Data Columns']
+            df2 = df
+            df2.columns = new_listrawdata        
+            
             new_listrawdata_df = pd.DataFrame(new_listrawdata)  
             print("Final Raw Data")
-            inputvalue = str(inputvalue) 
-            os.chdir((inputvalue))
-            new_listrawdata_df.columns = ['Raw Data Columns']
-            book = load_workbook('Dynata_v5.xlsx')
-            writer = pd.ExcelWriter('Dynata_v5.xlsx', engine='openpyxl') 
-            writer.book = book
-    
-    ## ExcelWriter for some reason uses writer.sheets to access the sheet.
-    ## If you leave it empty it will not know that sheet Main is already there
-    ## and will create a new sheet.
-    
-            writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
-            final_datamap_df.to_excel(writer, "FinalQuestionMapping12th_2",index = False,header = False)
-            writer.save()
             
-            wb = load_workbook('Dynata_v5.xlsx', read_only=False, keep_vba=False)
-            ws = wb['A1']
-    
-    # Overwrite Existing data in sheet with a dataframe.
-            rows = dataframe_to_rows(new_listrawdata_df, index=False, header=False)
-    
-            for c_idx, row in enumerate(rows, 1):
-                for r_idx, value in enumerate(row, 1):
-                    ws.cell(row=r_idx, column=c_idx, value=value)
+            ### Writing ####
+            #inputvalue = str(inputvalue) 
+            #os.chdir((inputvalue))
+            new_listrawdata_df.columns = ['Raw Data Columns']
+            
+            #import urllib
+
+           # import requests
+           # url = 'https://raw.githubusercontent.com/DEVV23/flying-dog-beers/200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm'
+           # read_data  = requests.get(url).content
+           
+            #csv_string = new_listrawdata_df.to_csv(index=False,encoding='utf-8')
+            #csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
+            xlsx_io = io.BytesIO()
+            writer = pd.ExcelWriter(xlsx_io, engine='xlsxwriter')
+            df2.to_excel(writer, sheet_name= "Raw Data", index = False)
+            final_datamap_df.to_excel(writer, sheet_name= "Answer Mapping",index = False)
+
+            writer.save()
+            xlsx_io.seek(0)
+            # https://en.wikipedia.org/wiki/Data_URI_scheme
+            media_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            data = base64.b64encode(xlsx_io.read()).decode("utf-8")
+            href_data_downloadable = f'data:{media_type};base64,{data}'
+             
+                    
+            
+            
+           # output = open('test.xls', 'wb')
+           # output.write(resp.content)
+            
+           # f = pd.read_excel(open('https://raw.githubusercontent.com/DEVV23/flying-dog-beers/200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm','rb'), sheetname='Answer Key')
+
+            
+            #wb = load_workbook('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm', read_only=False, keep_vba=True)
+            #ws = wb['Answer Key']
+            #rows_df = dataframe_to_rows(final_datamap_df, index=False, header=True)
+            #for c_idx, row in enumerate(rows_df, 1):
+            #    for r_idx, value in enumerate(row, 1):
+        
+             #       ws.cell(row=r_idx, column=c_idx, value=value)
     
     # Save file
-            wb.save('Dynata_v5.xlsx')
+            #wb.save('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6_updated11).xlsm')
+
+
+
+
+#            wb = load_workbook('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm', read_only=False, keep_vba=True)
+#            ws = wb['Raw Data']
     
+    # Overwrite Existing data in sheet with a dataframe.
+#            rows = dataframe_to_rows(new_listrawdata_df, index=False, header=False)
+#            rows_df = dataframe_to_rows(df, index=False, header=True)
+
+ #           for r_idx, row in enumerate(rows_df, 1):
+  #              for c_idx, value in enumerate(row, 1):
+   #                 ws.cell(row=r_idx, column=c_idx, value=value)
+
+    
+    #        for c_idx, row in enumerate(rows, 1):
+     #           for r_idx, value in enumerate(row, 1):
+      #              ws.cell(row=r_idx, column=c_idx, value=value)
+    
+    # Save file
+       #     wb.save('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6_updated11).xlsm')
             
-            return(html.Div([
-            html.H5("Output"),
-            dash_table.DataTable(
-                data=new_listrawdata_df.to_dict('records'),
-                columns=[{'name': i, 'id': i} for i in new_listrawdata_df.columns])]))
+            
+            
+
+            return(href_data_downloadable)            
+            #return(html.Div([
+            #html.H5("Output"),
+            #dash_table.DataTable(
+            #    data=new_listrawdata_df.to_dict('records'),
+            #    columns=[{'name': i, 'id': i} for i in new_listrawdata_df.columns])]))
+
 
 
 
