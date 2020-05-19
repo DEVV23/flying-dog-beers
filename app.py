@@ -3252,10 +3252,10 @@ def update_output(list_of_contents,inputvalue,templatevalue):
             
             for i,j in enumerate(new_listrawdata):
                 #print(j)
-                for m in mapping_df.iloc[:,2]:
+                for m in mapping_df.iloc[:,0]:
                     if (str(j) == str(m)):
                         #print(i)
-                        new_listrawdata[i] = mapping_df.loc[mapping_df['C'] == m, 'B'].iloc[0]
+                        new_listrawdata[i] = mapping_df.loc[mapping_df['A'] == m, 'B'].iloc[0]
             
                     
             df2 = df
