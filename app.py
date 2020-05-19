@@ -113,7 +113,8 @@ app.layout = html.Div([
         {'label': 'Template 3', 'value': 'Template 3'},
         {'label': 'Template 4', 'value': 'Template 4'},
         {'label': 'Template 5', 'value': 'Template 5'},
-        {'label': 'Template 6', 'value': 'Template 6'}
+        {'label': 'Template 6', 'value': 'Template 6'},
+        {'label': 'Template 7', 'value': 'Template 7'}
         
     ],
     value = ['Template 1'],
@@ -2852,7 +2853,488 @@ def update_output(list_of_contents,inputvalue,templatevalue):
             #    columns=[{'name': i, 'id': i} for i in new_listrawdata_df.columns])]))
 
 
+    if('Template 7' in templatevalue):
+              
+        if list_of_contents is not None:
+            children = [parse_contents(c) for c in list_of_contents]
+            children2 = [parse_contents_df1(c) for c in list_of_contents]
+            
+            #print((children[0]))
+            #print(children)
+            df = pd.DataFrame(children[0])
+            df1 = pd.DataFrame(children2[0])
+            
+            #print(df)
+            list_rawdata = list(df.columns.values.tolist())
+            
+            print(df1.head())
+            df1.head()
+        
+            def is_number(s):
+                try:
+                    float(s)
+                    return True
+                except ValueError:
+                    pass
+         
+                try:
+                    import unicodedata
+                    unicodedata.numeric(s)
+                    return True
+                except (TypeError, ValueError):
+                    pass
+                
+                return False
+                    
+            for i,l in enumerate(list_rawdata):
+                list_rawdata[i]=str(l)       
+            
+        
+            ### Removet the Coolumns which has unnamed in it
+            for l in list_rawdata:
+                if("Unnamed" in l):
+                    list_rawdata.remove(l)
+                    
+                    ## Converting the list to a String
+          
+            #### Creating two lists with Questions and their Options and One for the texts    
+            list_initial_a = list(df1.iloc[:,0].tolist())
+            list_initial_b = list(df1.iloc[:,1].tolist())
+            try:
+                list_initial_c = list(df1.iloc[:,2].tolist())
+            except:
+                print("No C")
+            for i in range(len(list_initial_a)):
+                list_initial_a[i]=str(list_initial_a[i])
+            
+        
+            list_a = []
+            list_b = []
+            list_c = []
+            list_d = []
+        
+            for i in list_initial_a:
+                list_a.append(str(i.split(":")[0]))
+                try:
+                    list_d.append(str(i.split(":")[1]))
+                except:
+                    list_d.append("-")
+                
+            
+        
+        
+        #list_ab = [incom for incom in list_a if str(incom) != 'nan']
+        #list_a = list(df1.iloc[:,0].tolist())
+            list_b = list(df1.iloc[:,1].tolist())
+            try:
+                list_c = list(df1.iloc[:,2].tolist())
+            except:
+                
+                print("No C")
+        
+        #### Treating List_a for : "
+        
+            
+            
+        #list_a_type3 = []
+        #for i in list_a:
+        #    list_a_type3.append(str(i.split(":")[0]))    
+            
+        ########################    
+        #for i in range(0,len(list_a)):
+            #print(i)
+        #    if((list_a[i] == "nan")):
+        #        list_a[i] = list_a[i].replace('nan',' ')
+             
+        ##################    
+            
+            list_a1 = []
+            list_b1 = []
+            list_c1 = []
+            list_d1 = []
+        
+        
+        #pd.isna(len(list_a[1]))
+        
+        #list_a.replace(r'^\s*$', np.nan, regex=True)
+        
+        
+            for i,a in enumerate(list_a):
+            #print(pd.isna(list_a[i]))
+            #if(len(list_a[i])>1):
+            
+                if((pd.notnull(a)==True)):
+                    list_a1.append(a)
+                    list_b1.append(list_b[i])
+                    try:
+                    
+                        list_c1.append(list_c[i])
+                        list_d1.append(list_d[i])
+                    except:
+                        continue 
+        
+                else:
+                    if(pd.notnull(list_b[i])==True):
+                        list_a1.append(list_b[i])
+                        list_b1.append(list_c[i])
+                    
+        #df_list = [list_a1,list_b1]
+        #df_list_1 =  pd.DataFrame(df_list)
+        #df_list_1 = df_list_1.T
+        
+        ### Creating a list for Questions,Options and Texts
+            list_a1_final=[]
+            list_b1_final=[]
+            list_c1_final = []
+            list_d1_final = []
+        
+            for i, a in enumerate(list_a1):
+                if (("type"  not in str(a).lower()) and ("values"  not in str(a).lower() )):
+                
+                #if(is_number(list_b1[i])==False):
+                #print(a)
+                    list_a1_final.append(str(a))
+                    list_b1_final.append(str(list_b1[i]))    
+                    try:
+                    
+                        list_c1_final.append(str(list_c1[i]))
+                        list_d1_final.append(str(list_d1[i]))
+                    except:
+                        continue
+        
+        
+            list_a2_final=list_a1_final
+            list_b2_final=list_b1_final
+            try:
+            
+                list_c2_final = list_c1_final
+                list_d2_final = list_d1_final
+            except:
+                print("No C")
+            
+            for i,l in enumerate(list_a1_final):
+                if(str(l) == 'nan'):
+                    list_a2_final[i] = list_b2_final[i]
+                    
+                    for i,l in enumerate(list_d1_final):
+                        if(str(l) != '-'):
+                            list_c2_final[i] = list_d2_final[i]
+        
+        
+            new_list_a2_final = []
+            
+            for j in list_a2_final:
+                new_list_a2_final.append(str(j).replace('[','').replace(']',''))
+                
+        #list_final =  pd.DataFrame(list_a1_final)
+            list_final_part_1 =  pd.DataFrame(new_list_a2_final)
+            list_final_part_2 =  pd.DataFrame(list_b1_final)
+            list_final_part_3 =  pd.DataFrame(list_c2_final)
+        
+        
+        ## Creating a list of all the Question which are not in the Raw Questions List
+            notr = []
+            for l in (list_a1_final):
+                if((l not in list_rawdata) & (l[0].isdigit()!=True) & (len(l)>1)):
+                    notr.append(l)
+        
+        
+        
+        ############# To indentify MultiSelect##############
+            list_final_part_1_list = []
+            list_final_part_1_list = list(list_final_part_1.iloc[:,0])
+            list_final_part_2_list = []
+        
+            try:
+            
+                list_final_part_2_list = list(list_final_part_3.iloc[:,0])
+            except:
+                list_final_part_2_list = list(list_final_part_2.iloc[:,0])
+        
+            
+            check_parent = {}
+            for l in list_final_part_1_list:
+            
+                if(((str(l) not in list_rawdata) & ((is_number(l)) == False) &  (len((l)) != 1))):
+                    check_parent[l] = "MultiSelectQues"
+        
+            try:
+            
+                del check_parent['Open text response']
+                del check_parent['Open numeric response']
+            except Exception:
+                pass
+            
+        
+        
+        
+        #### Final Data Map ####
+            list_final_part_2_df = pd.DataFrame(list_final_part_2_list)
+        
+            final_datamap =  pd.concat([list_final_part_1,list_final_part_2_df],axis = 1)
+            final_datamap_df = final_datamap.replace('nan','')
+            final_datamap_df = pd.DataFrame(final_datamap_df)
+            final_datamap_df.columns = ["Question","Mapping"]
+            
+        ####### Muli Select Answer Map ####
+            new = []
+            count = []
+            option = []
+            original_new = []
+            original_new_2 = []
+            for key, value in check_parent.items():
+                for l in list_final_part_1_list:
+                    if(key == str(l)):
+                        start_pos = (list_final_part_1_list.index(key))
+                        counter  = 0
+                        new = []
+                        while(list_final_part_1_list[start_pos+counter] != 'nan'):
+                            #print(start_pos+counter)
+                            if((list_final_part_1_list[start_pos+counter]).isdigit()==False):
+                                
+                                new.append(list_final_part_1_list[start_pos+counter])
+                                original_new.append(list_final_part_1_list[start_pos+counter])
+                                original_new_2.append(list_final_part_2_list[start_pos+counter])
+            
+                            counter = counter + 1
+                        original_new.append('')
+                        original_new_2.append('')
+            
+                        count.append(len(new))
+            
+                option.append(key)
+                        
+            
+            original_new_df = pd.DataFrame(original_new)
+            original_new_2_df = pd.DataFrame(original_new_2)
+            
+            check_parent_ss = {}
+            for l in list_final_part_1_list:
+                
+                if(((str(l) in list_rawdata) & ((is_number(l)) == False) &(str(l) not in check_parent.keys()) & (str(l) not in original_new) )):
+                    check_parent_ss[l] = "SingleSelectQues"
+            
+            
+            list_final_part_1_list.append('nan')
+            list_final_part_2_list.append('nan')
+            
+            new_s = []
+            count_s = []
+            option_s = []
+            original_new_s = []
+            original_new_2_s = []
+            for key, value in check_parent_ss.items():
+                for l in list_final_part_1_list:
+                    if(key == str(l)):
+                        start_pos = (list_final_part_1_list.index(key))
+                        counter  = 0
+                        new = []
+                        while(list_final_part_1_list[start_pos+counter] != 'nan'):
+                            #print(start_pos+counter)
+                            #if((list_final_part_1_list[start_pos+counter]).isdigit()==False):
+                                
+                            new_s.append(list_final_part_1_list[start_pos+counter])
+                            original_new_s.append(list_final_part_1_list[start_pos+counter])
+                            original_new_2_s.append(list_final_part_2_list[start_pos+counter])
+            
+                            counter = counter + 1
+                        original_new_s.append('')
+                        original_new_2_s.append('')
+            
+                        count.append(len(new_s))
+            
+                option_s.append(key)
+            
+            original_new_ss_df = pd.DataFrame(original_new_s)
+            original_new_ss_2_df = pd.DataFrame(original_new_2_s)
+            
+            final_ss_df = pd.concat([original_new_ss_df,original_new_ss_2_df],axis = 1)
+            final_ss_df_2 = pd.concat([original_new_df,original_new_2_df],axis = 1)
 
+            final_options_df = pd.concat([final_ss_df,final_ss_df_2],axis = 0)        
+            
+            
+            
+            
+            
+            
+            ###### Raw Data Column Treatement ##
+            
+            
+            
+            new = []
+            count = []
+            option = []
+            original_new_options = []
+            original_new_2_options = []
+            for key, value in check_parent.items():
+                for l in list_final_part_1_list:
+                    if(key == str(l)):
+                        start_pos = (list_final_part_1_list.index(key))
+                        counter  = 1
+                        new = []
+                            
+                        while(list_final_part_1_list[start_pos+counter] != 'nan'):
+                            #print(start_pos+counter)
+                            if((list_final_part_1_list[start_pos+counter]).isdigit()==False):
+                                
+                                new.append(list_final_part_1_list[start_pos+counter])
+                                original_new_options.append(list_final_part_1_list[start_pos+counter])
+                                original_new_2_options.append(list_final_part_2_list[start_pos+counter])
+            
+                            counter = counter + 1
+                        #original_new.append(' ')
+                        #original_new_2.append(' ')
+            
+                        count.append(len(new))
+            
+                option.append(key)
+            
+            parents = []
+            for key, value in check_parent.items(): 
+                parents.append(key)
+            
+            
+            
+            new_multiselect = []
+            new_multiselect_mapping = []
+            i = 0
+            for q,p in enumerate(parents):
+                print("----")
+                for k in range(i,(count[q]+i)):
+                    new_multiselect.append(p+"."+original_new_options[k])
+                    new_multiselect_mapping.append(p+": "+original_new_2_options[k])
+            
+                    i = k + 1
+                    
+                    
+                    
+            
+            #final_multiselect = []
+            #original_multiselect = []
+            
+            #for q,p in enumerate(parents):
+            #    for k in range(0,count[q]):
+            #        final_multiselect.append(p+".{}".format(k+1))
+            #        original_multiselect.append(p)
+                    
+            #final_multiselect_1 = []       
+            #final_multiselect_1 = list(zip(original_new, final_multiselect))
+            
+            
+            ################# Only if Multiselect Questions Format in the Data map are not the same as in the Raw Data
+            #original_multiset_rawoptions = []
+            #for i,j in enumerate(original_new):
+            #    original_multiset_rawoptions.append(original_multiselect[i] + "." + original_new[i])
+                
+            ###################################################################################################
+            
+            original_multiset_rawoptions = original_new_options
+            #original_multiset_rawoptions = original_new_2_options
+            
+            #final_multiselect_df = pd.DataFrame(final_multiselect)
+            final_new_multiselect_df = pd.DataFrame(new_multiselect)
+            final_new_multiselect_mapping_df = pd.DataFrame(new_multiselect_mapping)
+            
+            original_multiselect_df = pd.DataFrame(original_multiset_rawoptions)
+            
+            mapping_df = pd.concat([original_multiselect_df,final_new_multiselect_df,final_new_multiselect_mapping_df],axis =1)
+            mapping_df.columns = ['A','B','C']
+            
+            
+            list_rawdata = []
+            
+            list_rawdata = list(df.columns.values.tolist())
+            
+            
+            
+            new_listrawdata = list_rawdata
+            
+            for i,j in enumerate(new_listrawdata):
+                #print(j)
+                for m in mapping_df.iloc[:,2]:
+                    if (str(j) == str(m)):
+                        #print(i)
+                        new_listrawdata[i] = mapping_df.loc[mapping_df['C'] == m, 'B'].iloc[0]
+            
+                    
+            df2 = df
+            df2.columns = new_listrawdata        
+            
+            new_listrawdata_df = pd.DataFrame(new_listrawdata)  
+            print("Final Raw Data")
+            
+            ### Writing ####
+            #inputvalue = str(inputvalue) 
+            #os.chdir((inputvalue))
+            new_listrawdata_df.columns = ['Raw Data Columns']
+            
+            #import urllib
+
+           # import requests
+           # url = 'https://raw.githubusercontent.com/DEVV23/flying-dog-beers/200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm'
+           # read_data  = requests.get(url).content
+           
+            #csv_string = new_listrawdata_df.to_csv(index=False,encoding='utf-8')
+            #csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
+            xlsx_io = io.BytesIO()
+            writer = pd.ExcelWriter(xlsx_io, engine='xlsxwriter')
+            df2.to_excel(writer, sheet_name= "Raw Data", index = False)
+            final_options_df.to_excel(writer, sheet_name= "Answer Mapping",index = False)
+
+            writer.save()
+            xlsx_io.seek(0)
+            # https://en.wikipedia.org/wiki/Data_URI_scheme
+            media_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            data = base64.b64encode(xlsx_io.read()).decode("utf-8")
+            href_data_downloadable = f'data:{media_type};base64,{data}'
+             
+                    
+            
+            
+           # output = open('test.xls', 'wb')
+           # output.write(resp.content)
+            
+           # f = pd.read_excel(open('https://raw.githubusercontent.com/DEVV23/flying-dog-beers/200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm','rb'), sheetname='Answer Key')
+
+            
+            #wb = load_workbook('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm', read_only=False, keep_vba=True)
+            #ws = wb['Answer Key']
+            #rows_df = dataframe_to_rows(final_datamap_df, index=False, header=True)
+            #for c_idx, row in enumerate(rows_df, 1):
+            #    for r_idx, value in enumerate(row, 1):
+        
+             #       ws.cell(row=r_idx, column=c_idx, value=value)
+    
+    # Save file
+            #wb.save('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6_updated11).xlsm')
+
+
+
+
+#            wb = load_workbook('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6).xlsm', read_only=False, keep_vba=True)
+#            ws = wb['Raw Data']
+    
+    # Overwrite Existing data in sheet with a dataframe.
+#            rows = dataframe_to_rows(new_listrawdata_df, index=False, header=False)
+#            rows_df = dataframe_to_rows(df, index=False, header=True)
+
+ #           for r_idx, row in enumerate(rows_df, 1):
+  #              for c_idx, value in enumerate(row, 1):
+   #                 ws.cell(row=r_idx, column=c_idx, value=value)
+
+    
+    #        for c_idx, row in enumerate(rows, 1):
+     #           for r_idx, value in enumerate(row, 1):
+      #              ws.cell(row=r_idx, column=c_idx, value=value)
+    
+    # Save file
+       #     wb.save('200409 - BAST - Survey Automation - Pilot v2 Coded Final(Dynata_v6_updated11).xlsm')
+            
+            
+            
+
+            return(href_data_downloadable)  
 
 
 
